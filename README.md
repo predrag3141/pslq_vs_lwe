@@ -46,16 +46,23 @@ Here,
 In order to calculate _bit_ from _b'_, Alice combines Bob's preamble and her private key, _x_, to compute
 
 _b_<sup>t</sup> _x_
+
 &nbsp;&nbsp;&nbsp;&nbsp;= _s_<sup>t</sup> _Ax_ + _e_<sup>t</sup> _x_
+
 &nbsp;&nbsp;&nbsp;&nbsp;= _s_<sup>t</sup> _u_ + _e_<sup>t</sup> _x_
+
 &nbsp;&nbsp;&nbsp;&nbsp;~ _s_<sup>t</sup> _u_ (estimate 4)
 
 Alice then computes
 
 _b'_ - _b_<sup>t</sup> _x_
+
 &nbsp;&nbsp;&nbsp;&nbsp;= _s_<sup>t</sup> _u_ + _e'_ + _bit_ * _q_/2 - _b_<sup>t</sup> _x_
+
 &nbsp;&nbsp;&nbsp;&nbsp;~ _s_<sup>t</sup> _u_ + _e'_ + _bit_ * _q_/2 - _s_<sup>t</sup> _u_ (using estimate 4)
+
 &nbsp;&nbsp;&nbsp;&nbsp;= _e'_ + _bit_ * _q_/2
+
 &nbsp;&nbsp;&nbsp;&nbsp;~ _bit_ * _q_/2 (estimate 5)
 
 Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within ing _q_/4, Alice distinguishes _bit_ = 0 from _bit_ = 1 by concluding that
@@ -73,9 +80,16 @@ The fact that _x_ is short and that _Ax_ = _u_ mod _q_ are what make estimate 4 
 _A_ has row vectors _a_<sub>1</sub>,_a_<sub>2</sub>,...,_a_<sub>n</sub>, and _u_ has corresponding entries, _u_<sub>1</sub>,_u_<sub>2</sub>,...,_u_<sub>n</sub>. Select a suitably-sized integer, _base_.
 
 _Ay_ = _u_ mod q
+
 &nbsp;&nbsp;&nbsp;&nbsp;=>_a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ _u_<sub>n</sub> - _q_ - _base_ _q_ - _base_<sup>2</sup> _q_ - ... - _base_<sup>n-1</sup> _q_
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ _u_<sub>n</sub> - _q_ - _base_ _q_ - _base_<sup>2</sup> _q_ - ... - _base_<sup>n-1</sup> _q_
+
 &nbsp;&nbsp;&nbsp;&nbsp;=> _q_ + _base_ _q_ + _base_<sup>2</sup> _q_ + ... + _base_<sup>n-1</sup> _q_
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ _a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- _u_<sub>1</sub> - _base_ _u_<sub>2</sub> - _base_<sup>2</sup> _u_<sub>3</sub> - ... - _base_<sup>n-1</sup> _u_<sub>n</sub>
 = 0 (equation 6)
