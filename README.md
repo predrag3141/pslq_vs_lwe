@@ -83,13 +83,26 @@ _Ay_ = _u_ mod q
 
 &nbsp;&nbsp;&nbsp;&nbsp;=>_a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> _u_<sub>n</sub>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ _u_<sub>n</sub> - _q_ - _base_ _q_ - _base_<sup>2</sup> _q_ - ... - _base_<sup>n-1</sup> _q_
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- _q_ - _base_ _q_ - _base_<sup>2</sup> _q_ - ... - _base_<sup>n-1</sup> _q_
 
 &nbsp;&nbsp;&nbsp;&nbsp;=> _q_ + _base_ _q_ + _base_<sup>2</sup> _q_ + ... + _base_<sup>n-1</sup> _q_
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ _a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- _u_<sub>1</sub> - _base_ _u_<sub>2</sub> - _base_<sup>2</sup> _u_<sub>3</sub> - ... - _base_<sup>n-1</sup> _u_<sub>n</sub>
-= 0 (equation 6)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (-_u_<sub>1</sub>) + _base_ (-_u_<sub>2</sub>) + _base_<sup>2</sup> (-_u_<sub>3</sub>) + ... + _base_<sup>n-1</sup> (-_u_<sub>n</sub>) = 0 (equation 6)
+
+Based on equation 6, PSLQ is given input
+
+_v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_,  _a_<sub>1</sub>, _base_ _a_<sub>2</sub>, _base_<sup>2</sup> _a_<sub>3</sub>, ..., _base_<sup>n-1</sup> _a_<sub>n</sub>, -_u_<sub>1</sub>, _base_ -_u_<sub>2</sub>, _base_<sup>2</sup>, -_u_<sub>3</sub>, ..., _base_<sup>n-1</sup>, -_u_<sub>n</sub>)
+
+PSLQ *will* find a short solution _y_ of <_v_, _y_> = 0. _y_ *might* be a solution of _Ay_ = _u_. What can go wrong is
+- _y_ is a short non-causal solution; i.e., it does not satisfy each equation <_a_<sub>_i_</sub>, _y_> = _u_<sub>_i_</sub>, _i_=1,...,_n_. To mitigate this risk, _base_ must be chosen large enough that _y_ being is likely to be causal. In the code, for reasons outside the scope of this README, _base_ = 3<sup>_m_/_n_</sup>.
+- _y_ is not even short! Though PSLQ is designed to produce short solutions, its intended use case is for non-integer inputs. In this scenario, any integer solution is a win, and PSLQ terminates. There is a potential remedy to this problem, which -- for the most part -- is also outside the scope of this README. Suffice it to say that PSLQ optimizes the size of diagonal elements in its intenal matrix, H. But PSLQ also tracks an integer matrix, B, that gets close to the solution plane. Rather than optimize the diagonal elements of H, the algorithm could be modified to optimize the size of the projection of B's columns onto that plane. This would steadily sharpen the bound on the smallest solution of <_v_,_y_> = 0. Only when this bound can no longer be sharpened, would PSLQ be allowed to terminate. But the implementation the code in this repository uses doesn't incorporate such a modification.
+- _y_<sub>_m_ + _n_ + 1</sub> != 1. If the last coefficient of _y_ is 0, _y_ is a solution of _Ay_ = 0 -- no use in this situation. If the last coefficient of _y_ is other than 0 or 1, the solution needs to be multiplied by _y_<sub>_n_ + _m_ + 1</sub><sup>-1</sup> mod q. Only if _y_<sub>_n_ + _m_ + 1</sub> is a unit (1 or -1) does _y_/_y_<sub>_n_ + _m_ + 1</sub> remain a short solution of _Ay_ = _u_.
+
+You may have noticed that the coefficients, _base_<sup>i</sup> _q_, were moved from the end to the beginning of _v_. This is because the second bullet above, about _y_ not always being short, happens to come true: PSLQ returns a vector _y_ that is all-zero, except for two coefficients 1 and _base_ for some _base_<sup>i</sup> and _base_<sup>i+1</sup> in _v_.  |_y_| = sqrt(1 + _base_<sup>2</sup> ~ _base_ -- a disappointingly long output for PSLQ, and one with coefficient 0 for _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup>.
+
+# Running the Experiment
+
