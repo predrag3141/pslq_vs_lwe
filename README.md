@@ -8,11 +8,12 @@ This repository contains experiments using PSLQ to break Learning With Errors (L
 
 where the a<sub>i</sub> are real numbers.
 
-The Learning With Errors problem, whose hardness is the security guarantee for a variety of cryptographic primitives, is similar to equation (1) in one way: It, too, is a linear equation with a small, hard-to-find, not-all-zero solution. LWE is the security guarantee for at least two public key encryption schemes. One of these schemes is covered in [this video](https://www.youtube.com/watch?v=K_fNK04yG4o&list=PLgKuh-lKre10rqiTYqJi6P4UlBRMQtPn0&index=7). The description of this scheme starts at 28:30 into the video.
+The Learning With Errors problem, whose hardness is the security guarantee for a variety of cryptographic primitives, is similar to equation (1) in one way: It, too, is a linear equation with a small, hard-to-find, not-all-zero, discrete solution. LWE is the security guarantee for at least two public key encryption schemes. One of these schemes is covered in [this video](https://www.youtube.com/watch?v=K_fNK04yG4o&list=PLgKuh-lKre10rqiTYqJi6P4UlBRMQtPn0&index=7). The description of this scheme starts at 28:30 into the video.
 
-In this scheme, the secret is a short solution, x, of the matrix equation
+In this scheme, all computations are in a finite field, GF(_q_).
 
-<p>Ax=u<p>
-  
-Here, A is an n x m matrix and x is a secret one party chooses, and 
+_A_ is a public _n_ x _m_ matrix with _m_ >> _n log(n)_.
 
+One of the parties, whom we will call ALice, chooses short _m_-long vector _x_, a private key. Alice's public key is _u_ = _Ax_. _u_ is an _n_-long column vector.
+
+Another party, Bob, wishes to encrypt a message to Alice. Bob sends the ciphertext preamble, _b_<sup>t</sup>  = _sA_ + _e_<sup>t</sup> -- an _n_-long-vector -- using his own _n_-long secret vector, _s_. (The _t_ s mean transpose).
