@@ -14,15 +14,21 @@ In this scheme, all computations are in a finite field, GF(_q_).
 
 _A_ is a public _n_ x _m_ matrix with _m_ >> _n log(n)_.
 
-One of the parties, whom we will call ALice, chooses short _m_-long vector _x_, a private key. Alice's public key is _u_ = _Ax_. _u_ is an _n_-long column vector.
+One of the parties, whom we will call Alice, chooses short _m_-long vector _x_, a private key. Alice's public key is
+
+_u_ = _Ax_ (2)
+
+_u_ is an _n_-long column vector.
 
 Another party, Bob, wishes to encrypt a one-bit message, denoted _bit_ below, to Alice. First, Bob sends the ciphertext preamble,
 
-_b_<sup>t</sup>  = _sA_ + _e_<sup>t</sup> (2)
+_b_<sup>t</sup>  = _sA_ + _e_<sup>t</sup> (3)
 
-(The "_t_"s mean transpose). This preamble, an _n_-long-vector, uses Bob's own _n_-long secret vector, _s_.
+Here,
+- The "_t_"s mean transpose
+- Bob uses his own _n_-long secret vector, _s_
 
-Next, using Alice's public key _u_, Bob sends the payload -- a scalar:
+Next, using Alice's public key, _u_, Bob sends the payload -- a rational number:
 
 _b'_ = _s_<sup>t</sup> _u_ + _e'_ + (_q_ /2) _bit_
 
