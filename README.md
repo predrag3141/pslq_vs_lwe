@@ -146,7 +146,7 @@ Here is the meaning of the solution, _v_, above. The first three coefficients (0
 
 The experiment in this repository shows that attacking LWE with PSLQ may hold some promise. The next step is to implement PSLQ with adaptations to perform better with integer inputs. This implementation should be capable of arbitrary precision, in order to attack LWE with more realistic _m_, _n_ and _q_.
 
-Lastly, it's worth mentioning that there is a way to defend against this attack, and perhaps other lattice reduction attacks. Notice that PSLQ will tend to find small coefficients of the _n_ _base_<sup>_i_</sup> _q_. A randomly chosen private key, _x_, makes these coefficients small (~sqrt(nq)). But a carefully chosen _x_ could make the causals coefficient of _base_<sup>_i_</sup> large. To defend on lattice attacks like this one, it will help if
+Lastly, it's worth mentioning that there is a way to defend against this attack, and perhaps other lattice reduction attacks. Notice that PSLQ will tend to find small coefficients of the _q_-related coefficients, _base_<sup>_i_</sup> _q_. A randomly chosen private key, _x_, makes these coefficients small (~sqrt(nq)). But a carefully chosen _x_ could make the causals coefficient of _base_<sup>_i_</sup> large. To defend on lattice attacks like this one, it will help if
 - _x_ be the only solution of _Ax_ = _u_ small enough for Alice to calculate _bit_ and
 - _x_ be chosen so that at least one <_a_<sub>i</sub>, _x_> be a large multiple of _q_ that a lattice reduction algorithm will reject.
 
