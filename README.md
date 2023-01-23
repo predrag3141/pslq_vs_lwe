@@ -65,7 +65,7 @@ _b'_ - _b_<sup>t</sup> _x_
 
 &nbsp;&nbsp;&nbsp;&nbsp;~ _bit_ * _q_/2 (estimate 5)
 
-Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within ing _q_/4, Alice distinguishes _bit_ = 0 from _bit_ = 1 by concluding that
+Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within _q_/4, Alice distinguishes _bit_ = 0 from _bit_ = 1 by concluding that
 - _bit_ = 0 if -_q_/4 < _b'_ - _b_<sup>t</sup> _x_ - _b_<sup>t</sup> _x_ < _q_/4
 - _bit_ = 1 otherwise
 
@@ -95,10 +95,10 @@ _Ay_ = _u_ mod q
 
 Based on equation 6, PSLQ is given input
 
-_v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_,  _a_<sub>1</sub>, _base_ _a_<sub>2</sub>, _base_<sup>2</sup> _a_<sub>3</sub>, ..., _base_<sup>n-1</sup> _a_<sub>n</sub>, -_u_<sub>1</sub>, _base_ -_u_<sub>2</sub>, _base_<sup>2</sup>, -_u_<sub>3</sub>, ..., _base_<sup>n-1</sup>, -_u_<sub>n</sub>)
+_v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_,  _a_<sub>1</sub>, _base_ _a_<sub>2</sub>, _base_<sup>2</sup> _a_<sub>3</sub>, ..., _base_<sup>n-1</sup> _a_<sub>n</sub>, -_u_<sub>1</sub>, _base_ (-_u_<sub>2</sub>), _base_<sup>2</sup> (-_u_<sub>3</sub>), ..., _base_<sup>n-1</sup> (-_u_<sub>n</sub>)
 
 PSLQ *will* find a short solution _y_ of <_v_, _y_> = 0. _y_ *might* be a solution of _Ay_ = _u_. What can go wrong is
-- _y_ is a short non-causal solution; i.e., it does not satisfy each equation <_a_<sub>_i_</sub>, _y_> = _u_<sub>_i_</sub>, _i_=1,...,_n_. To mitigate this risk, _base_ must be chosen large enough that _y_ being is likely to be causal. In the code, for reasons outside the scope of this README, _base_ = 3<sup>_m_/_n_</sup>.
+- _y_ is a short non-causal solution; i.e., it does not satisfy each equation <_a_<sub>_i_</sub>, _y_> = _u_<sub>_i_</sub>, _i_=1,...,_n_. To mitigate this risk, _base_ must be chosen large enough that _y_ being is likely to be causal. In the code, for reasons outside the scope of this README, _base_ = 20<sup>(_m_ + _n_)/_n_</sup>.
 - _y_ is not even short! Though PSLQ is designed to produce short solutions, its intended use case is for non-integer inputs. In this scenario, any integer solution is a win, and PSLQ terminates. There is a potential remedy to this problem, which -- for the most part -- is also outside the scope of this README. Suffice it to say that PSLQ optimizes the size of diagonal elements in its intenal matrix, H. But PSLQ also tracks an integer matrix, B, that gets close to the solution plane. Rather than optimize the diagonal elements of H, the algorithm could be modified to optimize the size of the projection of B's columns onto that plane. This would steadily sharpen the bound on the smallest solution of <_v_,_y_> = 0. Only when this bound can no longer be sharpened, would PSLQ be allowed to terminate. But the implementation the code in this repository uses doesn't incorporate such a modification.
 - _y_<sub>_m_ + _n_ + 1</sub> != 1. If the last coefficient of _y_ is 0, _y_ is a solution of _Ay_ = 0 -- no use in this situation. If the last coefficient of _y_ is other than 0 or 1, the solution needs to be multiplied by _y_<sub>_n_ + _m_ + 1</sub><sup>-1</sup> mod q. Only if _y_<sub>_n_ + _m_ + 1</sub> is a unit (1 or -1) does _y_/_y_<sub>_n_ + _m_ + 1</sub> remain a short solution of _Ay_ = _u_.
 
@@ -106,3 +106,41 @@ You may have noticed that the coefficients, _base_<sup>i</sup> _q_, were moved f
 
 # Running the Experiment
 
+The code in this repository is a single file, PSLQ_vs_LWE.py. It defines small _n_ and _m_, and generates _v_ as described above. To run this, install [Python](https://www.python.org/downloads) and [mpmath](https://mpmath.org/doc/current/setup.html) if you haven't already.
+
+Below is the output of a successful run. It was one output amongst those of many unsuccessful runs. The unsuccesful runs went awry for the reasons in the bullet list under "What can go wrong" in the section, "Deriving a Private Key With PSLQ".
+
+Output of a successful run:
+```
+q = 11, n = 3, m = 9; Quit (y/n)?
+
+n
+A: [[3, 10, 4, 8, 10, 9, 8, 5, 10], [9, 10, 9, 8, 5, 1, 7, 1, 3], [1, 4, 4, 10, 4, 4, 7, 5, 4]]
+Private key x: [1, -1, 0, 1, 0, -1, -2, 0, -1]
+rawU: [-34, -11, -15]
+u: [10, 0, 7]
+rawUOverQ: [4, 1, 2]
+base: 160000
+
+Input v to PSLQ: [11, 1760000, 281600000000, 25601440003, 102401600010, 102401440004, 256001280008, 102400800010, 102400160009, 179201120008, 128000160005, 102400480010, -179200000010]
+
+Expected output w of PSLQ: [4, 1, 2, 1, -1, 0, 1, 0, -1, -2, 0, -1, 1]
+
+<v,x> - v[9] = <[11, 1760000, 281600000000, 25601440003, 102401600010, 102401440004, 256001280008, 102400800010, 102400160009, 179201120008, 128000160005, 102400480010, -179200000010], [1, -1, 0, 1, 0, -1, -2, 0, -1]> - 179201120008 = -204801760024
+
+<v,w> = <[11, 1760000, 281600000000, 25601440003, 102401600010, 102401440004, 256001280008, 102400800010, 102400160009, 179201120008, 128000160005, 102400480010, -179200000010], [4, 1, 2, 1, -1, 0, 1, 0, -1, -2, 0, -1, 1]> = 0
+
+PSLQ Found a causal solution [0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1]  with norm 2.23606797749979 : [0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1] != [1, -1, 0, 1, 0, -1, -2, 0, -1] = x
+```
+
+Here is the meaning of the solution, _v_, above. The first three coefficients (0, -1, 0) of _v_ make the rest of the solution work mod _q_. The next _m_ + 1 = 10 coefficients annihilate (_a_<sub>i,1</sub>, _a_<sub>i,2</sub>, ..., _a_<sub>i,9</sub>, -_u_<sub>i</sub>) mod _q_ for _i_=1,2,3.
+
+# Conclusion
+
+The experiment in this repository shows that attacking LWE with PSLQ may hold some promise. The next step is to implement PSLQ with adaptations to perform better with integer inputs. This implementation should be capable of arbitrary precision, in order to attack LWE with more realistic _m_, _n_ and _q_.
+
+Lastly, it's worth mentioning that there is a way to defend against this attack, and perhaps other lattice reduction attacks. Notice that PSLQ must find small coefficients of _q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., and _base_<sup>n-1</sup> _q_; but the private key, _x_, does not have to make these coefficients small. To defend on lattice attacks like this one, it will help if
+- _x_ be the only solution of _Ax_ = _u_ small enough for Alice to calculate _bit_ and
+- _x_ be chosen so that at least one <_a_<sub>i</sub>, _x_> be a large multiple of _q_ that a lattice reduction algorithm will reject.
+
+The above is difficult to pull off -- especially the first bullet -- and it is not a complete answer to lattice attacks. For example, the attacker can still launch a statistical attack on biased plaintext, even without calculating _bit_ correctly every time, by finding a small enough _y_ such that _Ay_ = _u_. But choosing _x_ so that at least one <_a_<sub>i</sub>, _x_> is a large multiple of _q_ is probably a good practice.
