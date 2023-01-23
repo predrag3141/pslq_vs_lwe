@@ -1,5 +1,8 @@
 # PSLQ vs. Learning With Errors
-This repository contains experiments using [PSLQ](https://www.davidhbailey.com/dhbpapers/pslq.pdf) to break a particular [Learning With Errors](https://en.wikipedia.org/wiki/Learning_with_errors) (LWE) encryption scheme in a toy-sized example. In short, the LWE scheme challenges an attacker to find a short solution to a linear equation with many constraints over a finite field. PSLQ is suited to solve the same problem, but with just one constraint. So the code in this repository transforms the original multi-constraint equation into a single-constraint equation and uses PSLQ to solve it in some toy examples.
+
+This repository contains an experiment using [PSLQ](https://www.davidhbailey.com/dhbpapers/pslq.pdf) to break a particular [Learning With Errors](https://en.wikipedia.org/wiki/Learning_with_errors) (LWE) encryption scheme in a toy-sized example.
+
+The LWE scheme challenges an attacker to find a short solution to a linear equation with many constraints over a finite field. PSLQ is suited to solve the same problem, but with just one constraint. So the code in this repository transforms the original multi-constraint equation into a single-constraint equation and uses PSLQ to solve it in some toy examples.
 
 # How it Works
 PSLQ is an algorithm that can find a small but not-all-zero integer-only solution z<sub>1</sub>,z<sub>2</sub>,...,z<sub>n</sub> of the equation
@@ -23,7 +26,7 @@ One of the parties, whom we will call Alice, chooses short _m_-long vector _x_, 
 _u_ = _Ax_ mod _q_ (equation 2)
 
 Here,
-- _x_ is short enough to keep estimate 5 below within _q_/4, which turns out to be close enough.
+- _x_ is short enough to keep estimate 5 (below) within _q_/4, which turns out to be close enough.
 - _u_ is an _n_-long column vector.
 
 Another party, Bob, wishes to encrypt a one-bit message, denoted _bit_ below, to Alice. First, Bob sends the ciphertext preamble,
@@ -33,7 +36,7 @@ _b_<sup>t</sup> = _sA_ + _e_<sup>t</sup> (equation 3)
 Here,
 - The "_t_"s mean transpose
 - _e_ is a temporary short vector private to Bob.
-- _e_, like _x_, is short enough to keep estimate 5 below within _q_/4. That doesn't mean that _e_ and _x_ have similar sizes, but they work together to keep estimate 5 that close.
+- _e_, like _x_, is short enough to keep estimate 5 (below) within _q_/4. That doesn't mean that _e_ and _x_ have similar sizes, but they work together to keep estimate 5 that close.
 - Bob uses his own _n_-long secret vector, _s_
 
 Next, using Alice's public key, _u_, Bob sends the payload -- a rational number:
@@ -71,13 +74,16 @@ Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within _q_/4, Alice disti
 
 ## Deriving a Private Key With PSLQ
 
-What keeps estimate 5 close enough to distinguish _bit_ = 0 from _bit_ = 1 is not the specific value of Alice's private key, _x_. It is also _how short_ _x_ is. So, to break this public key encryption scheme, it is enough to find a vector, _y_, such that
+What keeps estimate 5 close enough to distinguish _bit_ = 0 from _bit_ = 1 is not the specific value of Alice's private key, _x_. It is _how short_ _x_ is. To break this public key encryption scheme, it is enough to find a vector, _y_, such that
 - |_y_| <= |_x_| (in Euclidean norm)
 - A|_y_| = _u_ mod _q_
 
 The fact that _x_ is short and that _Ax_ = _u_ mod _q_ are what make estimate 4 work. Any _y_ with those properties would work too. PSLQ can be adapted to find _y_ as follows.
 
-_A_ has row vectors _a_<sub>1</sub>,_a_<sub>2</sub>,...,_a_<sub>n</sub>, and _u_ has corresponding entries, _u_<sub>1</sub>,_u_<sub>2</sub>,...,_u_<sub>n</sub>. Select a suitably-sized integer, _base_.
+Notation:
+- _A_ has row vectors _a_<sub>1</sub>,_a_<sub>2</sub>,...,_a_<sub>n</sub>
+- _u_ has corresponding entries, _u_<sub>1</sub>,_u_<sub>2</sub>,...,_u_<sub>n</sub>
+- Select a suitably-sized integer, denoted _base_ in what follows
 
 _Ay_ = _u_ mod q
 
@@ -139,8 +145,8 @@ Here is the meaning of the solution, _v_, above. The first three coefficients (0
 
 The experiment in this repository shows that attacking LWE with PSLQ may hold some promise. The next step is to implement PSLQ with adaptations to perform better with integer inputs. This implementation should be capable of arbitrary precision, in order to attack LWE with more realistic _m_, _n_ and _q_.
 
-Lastly, it's worth mentioning that there is a way to defend against this attack, and perhaps other lattice reduction attacks. Notice that PSLQ must find small coefficients of _q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., and _base_<sup>n-1</sup> _q_; but the private key, _x_, does not have to make these coefficients small. To defend on lattice attacks like this one, it will help if
+Lastly, it's worth mentioning that there is a way to defend against this attack, and perhaps other lattice reduction attacks. Notice that PSLQ will tend to find small coefficients of the _n_ _base_<sup>_i_</sup> _q_. A randomly chosen private key, _x_, makes these coefficients small (~sqrt(nq)). But a carefully chosen _x_ could make the causals coefficient of _base_<sup>_i_</sup> large. To defend on lattice attacks like this one, it will help if
 - _x_ be the only solution of _Ax_ = _u_ small enough for Alice to calculate _bit_ and
 - _x_ be chosen so that at least one <_a_<sub>i</sub>, _x_> be a large multiple of _q_ that a lattice reduction algorithm will reject.
 
-The above is difficult to pull off -- especially the first bullet -- and it is not a complete answer to lattice attacks. For example, the attacker can still launch a statistical attack on biased plaintext, even without calculating _bit_ correctly every time, by finding a small enough _y_ such that _Ay_ = _u_. But choosing _x_ so that at least one <_a_<sub>i</sub>, _x_> is a large multiple of _q_ is probably a good practice.
+The above is difficult to pull off -- especially the first bullet -- and it is not a complete answer to lattice attacks. For example, the attacker can still launch a statistical attack on biased plaintext, even without calculating _bit_ correctly every time, by finding a small enough _y_ such that _Ay_ = _u_. But choosing _x_ so that some of the <_a_<sub>i</sub>, _x_> are large multiples of _q_ is probably a good practice.
