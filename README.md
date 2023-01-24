@@ -116,7 +116,9 @@ _Ay_ = _u_ mod q
 
 Based on equation 6, PSLQ is given input
 
-_v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_,  _a_<sub>1</sub>, _base_ _a_<sub>2</sub>, _base_<sup>2</sup> _a_<sub>3</sub>, ..., _base_<sup>n-1</sup> _a_<sub>n</sub>, -_u_<sub>1</sub>, _base_ (-_u_<sub>2</sub>), _base_<sup>2</sup> (-_u_<sub>3</sub>), ..., _base_<sup>n-1</sup> (-_u_<sub>n</sub>)
+_v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_,  _a_<sub>1</sub>, _base_ _a_<sub>2</sub>, _base_<sup>2</sup> _a_<sub>3</sub>, ..., _base_<sup>n-1</sup> _a_<sub>n</sub>, _u_')
+
+where _u_' = -(_u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> + _u_<sub>n</sub>)
 
 ### Calling PSLQ
 
@@ -127,7 +129,7 @@ What can go wrong is
 - _y_ not even being short! Though PSLQ is designed to produce short solutions, its intended use case is for non-integer inputs. In this scenario, any integer solution is (falsely) considered a win, and PSLQ terminates. There is a potential remedy to this problem, which -- for the most part -- is also outside the scope of this README. Suffice it to say that PSLQ optimizes the size of diagonal elements in its intenal matrix, H. But PSLQ also tracks an integer matrix, B, whose columns get close to the solution plane. Rather than optimize the diagonal elements of H, the algorithm could be modified to optimize the size of the projection of B's columns onto that plane. This would steadily sharpen the bound on the smallest solution of <_v_,_y_> = 0. Only when this bound can no longer be sharpened, would PSLQ be allowed to terminate. But the implementation of PSLQ that the code in this repository uses doesn't incorporate such a modification.
 - _y_<sub>_m_ + _n_ + 1</sub> != 1. If the last coefficient of _y_ is 0, _y_ is a solution of _Ay_ = 0 -- no use in this situation. If the last coefficient of _y_ is other than 0 or 1, the solution needs to be multiplied by _y_<sub>_n_ + _m_ + 1</sub><sup>-1</sup> mod q. Only if _y_<sub>_n_ + _m_ + 1</sub> is a unit (1 or -1) does _y_/_y_<sub>_n_ + _m_ + 1</sub> remain a short solution of _Ay_ = _u_.
 
-You may have noticed a strange reordering of terms in the previous section, "Constructing Input to PSLQ". The _q_-related coefficients -- _base_<sup>i</sup> _q_ for _i_=1,2,...,_n_ -- were moved from the end to the beginning of _v_. This is because, in the ordering with the _base_<sup>i</sup> _q_ at the end, the particular implementation of PSLQ used caused the second bullet above, about _y_ not always being short, to come true. PSLQ returned a vector _y_ that is all-zero, except for two coefficients 1 and -_base_. These two coefficients corresponded to some _base_<sup>i</sup> and _base_<sup>i+1</sup> in _v_. In this unuseable result, |_y_| = sqrt(1 + _base_<sup>2</sup>) ~ _base_ -- a disappointingly long output for PSLQ, and one with coefficient 0 for the coordinate that packages up the elements of _u_.
+You may have noticed a strange reordering of terms in the previous section, "Constructing Input to PSLQ". The _q_-related coefficients -- _base_<sup>i</sup> _q_ for _i_=1,2,...,_n_ -- were moved from the end to the beginning of _v_. This is because, in the ordering with the _base_<sup>i</sup> _q_ at the end, the particular implementation of PSLQ used caused the second bullet above, about _y_ not always being short, to come true. PSLQ returned a vector _y_ that is all-zero, except for two coefficients 1 and -_base_. These two coefficients corresponded to some _base_<sup>i</sup> and _base_<sup>i+1</sup> in _v_. In this unuseable result, |_y_| = sqrt(1 + _base_<sup>2</sup>) ~ _base_ -- a disappointingly long output for PSLQ, and one with coefficient 0 for the coordinate, _u_', that packages up the elements of _u_.
 
 # Running the Experiment
 
