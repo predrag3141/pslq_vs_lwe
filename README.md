@@ -81,6 +81,8 @@ Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within _q_/4, Alice disti
 
 ## Breaking this Scheme with PSLQ
 
+"Breaking LWE" sounds dramatic, but this is a toy-sized example. Lots already goes wrong as we'll see, and much of this is repairable at the scale of a toy example. The interesting part would be trying to scale the size of the example, and of course more can go wrong when that happens. But PSLQ *is* a polynomial time algorithm in precision and dimension (_m_ in this case). So there is reason to investigate, beginning with this baby step.
+
 ### Any Short Solution Works
 
 What keeps estimate 5 close enough to distinguish _bit_ = 0 from _bit_ = 1 is not the specific value of Alice's private key, _x_. It is _how short_ _x_ is. To break this public key encryption scheme, it is enough to find a vector, _y_, such that
