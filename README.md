@@ -18,6 +18,8 @@ The LWE problem, whose hardness is the security guarantee for a variety of crypt
 
 LWE is the security guarantee for at least two public key encryption schemes. One of these schemes is covered in [this video](https://www.youtube.com/watch?v=K_fNK04yG4o&list=PLgKuh-lKre10rqiTYqJi6P4UlBRMQtPn0&index=7). The description of this scheme starts at 28:30 into the video.
 
+### Public and Private Key
+
 In this scheme, all computations are in a finite field, GF(_q_), where _q_ is a moderately large prime number. To give an idea of the size of _q_, the toy-sized code in this repository iterates through values of _q_ starting with 11.
 
 _A_ is a public _n_ x _m_ matrix with _m_ >> _n log(n)_. The toy-sized _n_ and _m_ in the code here are 3 and 9, respectively. 
@@ -29,6 +31,8 @@ _u_ = _Ax_ mod _q_ (equation 2)
 Here,
 - _x_ is short enough to keep estimate 5 (below) within _q_/4, which turns out to be close enough.
 - _u_ is an _n_-long column vector.
+
+### Encrypting
 
 Another party, Bob, wishes to encrypt a one-bit message, denoted _bit_ below, to Alice. First, Bob sends the ciphertext preamble,
 
@@ -46,6 +50,8 @@ _b'_ = _s_<sup>t</sup> _u_ + _e'_ + (_q_ /2) _bit_
 
 Here,
 - _e'_, like _e_ and _x_, is short enough to keep the estimate 5 (below) within _q_/4.
+
+### Decrypting
 
 In order to calculate _bit_ from _b'_, Alice combines Bob's preamble and her private key, _x_, to compute
 
