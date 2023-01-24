@@ -81,7 +81,7 @@ Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within _q_/4, Alice disti
 
 ## Breaking this Scheme with PSLQ
 
-"Breaking LWE" sounds dramatic, but this is a toy-sized example. Lots already goes wrong as we'll see; yet all of it is repairable at the scale of a toy example. As we'll also see, there was one success out of many failures, but the ratio should improve with tweaks to PSLQ. The interesting part would be trying to scale the size of the example, and of course more can go wrong when that happens. But PSLQ *is* a polynomial time algorithm in precision and dimension (_m_ in this case). So there is reason to investigate, beginning with this baby step.
+"Breaking LWE" sounds dramatic, but this is a toy-sized example. Lots already goes wrong as we'll see; yet there was one success out of many failures, and the success ratio should improve with tweaks to PSLQ. The interesting part would be trying to scale the size of the example, and of course more can go wrong when that happens. But PSLQ *is* a polynomial time algorithm in precision and dimension (_m_ in this case). So there is reason to investigate, beginning with this baby step.
 
 ### Any Short Solution Works
 
