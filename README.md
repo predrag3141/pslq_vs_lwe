@@ -73,7 +73,9 @@ Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within _q_/4, Alice disti
 - _bit_ = 0 if -_q_/4 < _b'_ - _b_<sup>t</sup> _x_ - _b_<sup>t</sup> _x_ < _q_/4
 - _bit_ = 1 otherwise
 
-## Deriving a Private Key With PSLQ
+## Breaking this Scheme with PSLQ
+
+### Any Short Solution Works
 
 What keeps estimate 5 close enough to distinguish _bit_ = 0 from _bit_ = 1 is not the specific value of Alice's private key, _x_. It is _how short_ _x_ is. To break this public key encryption scheme, it is enough to find a vector, _y_, such that
 - |_y_| <= |_x_| (in Euclidean norm)
@@ -81,10 +83,14 @@ What keeps estimate 5 close enough to distinguish _bit_ = 0 from _bit_ = 1 is no
 
 The fact that _x_ is short and that _Ax_ = _u_ mod _q_ are what make estimate 4 work. Any _y_ with those properties would work too. PSLQ can be adapted to find _y_ as follows.
 
+### Constructing Input to PSLQ
+
 Notation:
 - _A_ has row vectors _a_<sub>1</sub>,_a_<sub>2</sub>,...,_a_<sub>n</sub>
 - _u_ has corresponding entries, _u_<sub>1</sub>,_u_<sub>2</sub>,...,_u_<sub>n</sub>
 - Select a suitably-sized integer, denoted _base_ in what follows
+- _y_ will denote the short solution mentioned in the previous section.
+- _v_ will denote the input to give PSLQ, to get PSLQ to return a short solution of _Ay_ = _u_ mod _q_
 
 _Ay_ = _u_ mod q
 
@@ -104,12 +110,16 @@ Based on equation 6, PSLQ is given input
 
 _v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_,  _a_<sub>1</sub>, _base_ _a_<sub>2</sub>, _base_<sup>2</sup> _a_<sub>3</sub>, ..., _base_<sup>n-1</sup> _a_<sub>n</sub>, -_u_<sub>1</sub>, _base_ (-_u_<sub>2</sub>), _base_<sup>2</sup> (-_u_<sub>3</sub>), ..., _base_<sup>n-1</sup> (-_u_<sub>n</sub>)
 
-PSLQ *will* find a short solution _y_ of <_v_, _y_> = 0. _y_ *might* be a solution of _Ay_ = _u_. What can go wrong is
-- _y_ is a short non-causal solution; i.e., it does not satisfy each equation <_a_<sub>_i_</sub>, _y_> = _u_<sub>_i_</sub>, _i_=1,...,_n_. To mitigate this risk, _base_ must be chosen large enough that _y_ being is likely to be causal. In the code, for reasons outside the scope of this README, _base_ = 20<sup>(_m_ + _n_)/_n_</sup>.
-- _y_ is not even short! Though PSLQ is designed to produce short solutions, its intended use case is for non-integer inputs. In this scenario, any integer solution is (falsely) considered a win, and PSLQ terminates. There is a potential remedy to this problem, which -- for the most part -- is also outside the scope of this README. Suffice it to say that PSLQ optimizes the size of diagonal elements in its intenal matrix, H. But PSLQ also tracks an integer matrix, B, whose columns get close to the solution plane. Rather than optimize the diagonal elements of H, the algorithm could be modified to optimize the size of the projection of B's columns onto that plane. This would steadily sharpen the bound on the smallest solution of <_v_,_y_> = 0. Only when this bound can no longer be sharpened, would PSLQ be allowed to terminate. But the implementation of PSLQ that the code in this repository uses doesn't incorporate such a modification.
+### Calling PSLQ
+
+PSLQ *will* find a short solution _y_ of <_v_, _y_> = 0. If all goes well, _y_ will be a solution of _Ay_ = _u_ mod _q_.
+
+What can go wrong is
+- _y_ being a short non-causal solution; i.e., it does not satisfy each equation <_a_<sub>_i_</sub>, _y_> = _u_<sub>_i_</sub>, _i_=1,...,_n_. To mitigate this risk, _base_ must be chosen large enough that _y_ being is likely to be causal. In the code, for reasons outside the scope of this README, _base_ = 20<sup>(_m_ + _n_)/_n_</sup>.
+- _y_ not even being short! Though PSLQ is designed to produce short solutions, its intended use case is for non-integer inputs. In this scenario, any integer solution is (falsely) considered a win, and PSLQ terminates. There is a potential remedy to this problem, which -- for the most part -- is also outside the scope of this README. Suffice it to say that PSLQ optimizes the size of diagonal elements in its intenal matrix, H. But PSLQ also tracks an integer matrix, B, whose columns get close to the solution plane. Rather than optimize the diagonal elements of H, the algorithm could be modified to optimize the size of the projection of B's columns onto that plane. This would steadily sharpen the bound on the smallest solution of <_v_,_y_> = 0. Only when this bound can no longer be sharpened, would PSLQ be allowed to terminate. But the implementation of PSLQ that the code in this repository uses doesn't incorporate such a modification.
 - _y_<sub>_m_ + _n_ + 1</sub> != 1. If the last coefficient of _y_ is 0, _y_ is a solution of _Ay_ = 0 -- no use in this situation. If the last coefficient of _y_ is other than 0 or 1, the solution needs to be multiplied by _y_<sub>_n_ + _m_ + 1</sub><sup>-1</sup> mod q. Only if _y_<sub>_n_ + _m_ + 1</sub> is a unit (1 or -1) does _y_/_y_<sub>_n_ + _m_ + 1</sub> remain a short solution of _Ay_ = _u_.
 
-You may have noticed that in the calculations above, the _q_-related coefficients -- _base_<sup>i</sup> _q_ -- were moved from the end to the beginning of _v_. This is because, in the ordering with the _base_<sup>i</sup> _q_ at the end, the second bullet above, about _y_ not always being short, happens to come true: PSLQ returns a vector _y_ that is all-zero, except for two coefficients 1 and _base_ for some _base_<sup>i</sup> and _base_<sup>i+1</sup> in _v_.  |_y_| = sqrt(1 + _base_<sup>2</sup> ~ _base_ -- a disappointingly long output for PSLQ, and one with coefficient 0 for the coordinate that packages up the elements of _u_.
+You may have noticed that in the calculations above, the _q_-related coefficients -- _base_<sup>i</sup> _q_ for _i_=1,2,...,_n_ -- were moved from the end to the beginning of _v_. This is because, in the ordering with the _base_<sup>i</sup> _q_ at the end, the second bullet above, about _y_ not always being short, happens to come true: PSLQ returns a vector _y_ that is all-zero, except for two coefficients 1 and _base_ for some _base_<sup>i</sup> and _base_<sup>i+1</sup> in _v_.  |_y_| = sqrt(1 + _base_<sup>2</sup> ~ _base_ -- a disappointingly long output for PSLQ, and one with coefficient 0 for the coordinate that packages up the elements of _u_.
 
 # Running the Experiment
 
