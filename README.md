@@ -102,7 +102,7 @@ Notation:
 
 _Ay_ = _u_ mod q
 
-&nbsp;&nbsp;&nbsp;&nbsp;=>< _a_<sub>1</sub>, _y_ > + < _base_ _a_<sub>2</sub>, _y_ > + < _base_<sup>2</sup> _a_<sub>3</sub>, _y_ > + ... + < _base_<sup>n-1</sup> _a_<sub>n</sub>, _y_ >
+&nbsp;&nbsp;&nbsp;&nbsp;=><_a_<sub>1</sub>, _y_> + <_base_ _a_<sub>2</sub>, _y_> + <_base_<sup>2</sup> _a_<sub>3</sub>, _y_> + ... + <_base_<sup>n-1</sup> _a_<sub>n</sub>, _y_>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> _u_<sub>n</sub>
 
@@ -110,7 +110,7 @@ _Ay_ = _u_ mod q
 
 &nbsp;&nbsp;&nbsp;&nbsp;=> _q_ + _base_ _q_ + _base_<sup>2</sup> _q_ + ... + _base_<sup>n-1</sup> _q_
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ < _a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>, _y_ >
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <_a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>, _y_>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (-_u_<sub>1</sub>) + _base_ (-_u_<sub>2</sub>) + _base_<sup>2</sup> (-_u_<sub>3</sub>) + ... + _base_<sup>n-1</sup> (-_u_<sub>n</sub>) = 0 (equation 6)
 
@@ -122,14 +122,14 @@ where _u_' = _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<s
 
 ### Calling PSLQ
 
-PSLQ *will* find a short solution _y_ of <_v_, _y_> = 0. If all goes well, _y_ will be a solution of _Ay_ = _u_ mod _q_.
+PSLQ *will* find a short solution _y<sub>ext</sub>_ of <_v_, _y<sub>ext</sub>_> = 0. (Subscript "ext" highlights the fact that _y<sub>ext</sub>_ is an extension of the deisred solution, _y_, of _Ay_ = _u_). If all goes well, _y_ = (_y<sub>ext</sub>_<sub>n+1</sub>, _y<sub>ext</sub>_<sub>n+2</sub>, ..., _y_<sub>n+m</sub>) will be a solution of _Ay_ = _u_ mod _q_.
 
 What can go wrong is
-- _y_ being a short non-causal solution; i.e., it does not satisfy each equation <_a_<sub>_i_</sub>, _y_> = _u_<sub>_i_</sub>, _i_=1,...,_n_. To mitigate this risk, _base_ must be chosen large enough that _y_ being is likely to be causal. In the code, for reasons outside the scope of this README, _base_ = 20<sup>(_m_ + _n_)/_n_</sup>.
-- _y_ not even being short! Though PSLQ is designed to produce short solutions, its intended use case is for non-integer inputs. In this scenario, any integer solution is (falsely) considered a win, and PSLQ terminates. There is a potential remedy to this problem, which -- for the most part -- is also outside the scope of this README. Suffice it to say that PSLQ optimizes the size of diagonal elements in its intenal matrix, H. But PSLQ also tracks an integer matrix, B, whose columns get close to the solution plane. Rather than optimize the diagonal elements of H, the algorithm could be modified to optimize the size of the projection of B's columns onto that plane. This would steadily sharpen the bound on the smallest solution of <_v_,_y_> = 0. Only when this bound can no longer be sharpened, would PSLQ be allowed to terminate. But the implementation of PSLQ that the code in this repository uses doesn't incorporate such a modification.
-- _y_<sub>_m_ + _n_ + 1</sub> != 1. If the last coefficient of _y_ is 0, _y_ is a solution of _Ay_ = 0 -- no use in this situation. If the last coefficient of _y_ is other than 0 or 1, the solution needs to be multiplied by _y_<sub>_n_ + _m_ + 1</sub><sup>-1</sup> mod q. Only if _y_<sub>_n_ + _m_ + 1</sub> is a unit (1 or -1) does _y_/_y_<sub>_n_ + _m_ + 1</sub> remain a short solution of _Ay_ = _u_.
+- _y<sub>ext</sub>_ being a short non-causal solution; i.e., _y_ does not satisfy each equation <_a_<sub>_i_</sub>, _y_> = _u_<sub>_i_</sub>, _i_=1,...,_n_. To mitigate this risk, _base_ must be chosen large enough that _y_ being is likely to be causal. In the code, for reasons outside the scope of this README, _base_ = 20<sup>(_m_ + _n_)/_n_</sup>.
+- _y<sub>ext</sub>_ not even being short! Though PSLQ is designed to produce short solutions, its intended use case is for non-integer inputs. In this scenario, any integer solution is (falsely) considered a win, and PSLQ terminates. There is a potential remedy to this problem, which -- for the most part -- is also outside the scope of this README. Suffice it to say that PSLQ optimizes the size of diagonal elements in its intenal matrix, H. But PSLQ also tracks an integer matrix, B, whose columns get close to the solution plane. Rather than optimize the diagonal elements of H, the algorithm could be modified to optimize the size of the projection of B's columns onto that plane. This would steadily sharpen the bound on the smallest solution of <_v_,_y_> = 0. Only when this bound can no longer be sharpened, would PSLQ be allowed to terminate. But the implementation of PSLQ that the code in this repository uses doesn't incorporate such a modification.
+- _y<sub>ext</sub>_<sub>_m_ + _n_ + 1</sub> != 1. If the last coefficient of _y<sub>ext</sub>_ is 0, _y_ is a solution of _Ay_ = 0 mod _q_ -- no use in this situation. If the last coefficient of _y<sub>ext</sub>_ is other than 0 or 1, _y<sub>ext</sub>_ needs to be multiplied by _y<sub>ext</sub>_<sub>_n_ + _m_ + 1</sub><sup>-1</sup> mod q. Only if _y<sub>ext</sub>_<sub>_n_ + _m_ + 1</sub> is a unit (1 or -1) does _y_/_y<sub>ext</sub>_<sub>_n_ + _m_ + 1</sub> remain a short solution of _Ay_ = _u_.
 
-You may have noticed a strange reordering of terms in the previous section, "Constructing Input to PSLQ". The _q_-related coefficients -- _base_<sup>i</sup> _q_ for _i_=1,2,...,_n_ -- were moved from the end to the beginning of _v_. This is because, in the ordering with the _base_<sup>i</sup> _q_ at the end, the particular implementation of PSLQ used caused the second bullet above, about _y_ not always being short, to come true. PSLQ returned a vector _y_ that is all-zero, except for two coefficients 1 and -_base_. These two coefficients corresponded to some _base_<sup>i</sup> and _base_<sup>i+1</sup> in _v_. In this unuseable result, |_y_| = sqrt(1 + _base_<sup>2</sup>) ~ _base_ -- a disappointingly long output for PSLQ, and one with coefficient 0 for the coordinate, _u_', that packages up the elements of _u_.
+You may have noticed a strange reordering of terms in the previous section, "Constructing Input to PSLQ". The _q_-related coefficients -- _base_<sup>i</sup> _q_ for _i_=1,2,...,_n_ -- were moved from the end to the beginning of _v_. This is because, in the ordering with the _base_<sup>i</sup> _q_ at the end, the particular implementation of PSLQ used caused the second bullet above, about _y<sub>ext</sub>_ not always being short, to come true. PSLQ returned a vector _y<sub>ext</sub>_ that is all-zero, except for two coefficients 1 and -_base_. These two coefficients corresponded to some _base_<sup>i</sup> and _base_<sup>i+1</sup> in _v_. In this unuseable result, |_y<sub>ext</sub>_| = sqrt(1 + _base_<sup>2</sup>) ~ _base_ -- a disappointingly long output for PSLQ, and one with coefficient 0 in the position of the last coordinate, _u_', that packages up the elements of _u_.
 
 # Running the Experiment
 
@@ -160,7 +160,7 @@ Expected output w of PSLQ: [4, 1, 2, 1, -1, 0, 1, 0, -1, -2, 0, -1, 1]
 PSLQ Found a causal solution [0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1]  with norm 2.23606797749979 : [0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1] != [1, -1, 0, 1, 0, -1, -2, 0, -1] = x
 ```
 
-Here is the meaning of the solution, _y_ = `[0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1]`, above. The first three coefficients (0, -1, 0) of _y_ make the rest of the solution work mod _q_. The next _m_ + 1 = 10 coefficients annihilate (_a_<sub>i,1</sub>, _a_<sub>i,2</sub>, ..., _a_<sub>i,9</sub>, -_u_<sub>i</sub>) mod _q_ for _i_=1,2,3.
+Here is the meaning of the solution, _y<sub>ext</sub>_ = `[0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1]`, above. The first three coefficients (0, -1, 0) of _y<sub>ext</sub>_ make the rest of the solution work mod _q_. The next _m_ + 1 = 10 coefficients annihilate (_a_<sub>i,1</sub>, _a_<sub>i,2</sub>, ..., _a_<sub>i,9</sub>, -_u_<sub>i</sub>) mod _q_ for _i_=1,2,3.
 
 # Conclusion
 
@@ -170,4 +170,4 @@ Lastly, it's worth mentioning that there is a way to defend against this attack,
 - _x_ be the *only* solution of _Ax_ = _u_ mod _q_ small enough for Alice to calculate _bit_ and
 - _x_ be chosen so that some of the <_a_<sub>i</sub>, _x_> - _u_<sub>i</sub> are a large multiple of _q_ that a lattice reduction algorithm will reject.
 
-The first constraint above may be difficult to pull off, and the two constraints are not a complete answer to lattice attacks. The attacker can still launch a statistical attack on biased plaintext, even without calculating _bit_ correctly every time, by finding a small enough _y_ -- albeit not as small as the private key, _x_ -- such that _Ay_ = _u_ mod _q_. With all that said, the easier constraint -- choosing _x_ so that some of the <_a_<sub>i</sub>, _x_> - _u_<sub>i</sub> are large multiples of _q_ -- is probably a good practice.
+The first constraint above may be difficult to pull off, and the two constraints are not a complete answer to lattice attacks. The attacker can still launch a statistical attack on biased plaintext, even without calculating _bit_ correctly every time, by finding a small enough _y<sub>ext</sub>_ -- albeit not as small as the private key, _x_ -- such that _Ay_ = _u_ mod _q_. With all that said, the easier constraint -- choosing _x_ so that some of the <_a_<sub>i</sub>, _x_> - _u_<sub>i</sub> are large multiples of _q_ -- is probably a good practice.
