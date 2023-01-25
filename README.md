@@ -135,7 +135,7 @@ You may have noticed a strange reordering of terms in the previous section, "Con
 
 The code in this repository is a single file, PSLQ_vs_LWE.py. It defines small _n_ and _m_, and generates _v_ as described above. To run this, install [Python](https://www.python.org/downloads) and [mpmath](https://mpmath.org/doc/current/setup.html) if you haven't already.
 
-Below is the output of a successful run. It was one output amongst those of many unsuccessful runs. The unsuccesful runs went awry for the reasons in the bullet list under "What can go wrong" in the section, "Deriving a Private Key With PSLQ".
+Below is the output of a successful run. It was one output amongst those of many unsuccessful runs. The unsuccesful runs went awry for the reasons in the bullet list under "What can go wrong" in the section, "Calling PSLQ".
 
 Output of a successful run:
 ```
