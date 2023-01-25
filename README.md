@@ -168,6 +168,6 @@ The experiment in this repository shows that attacking LWE with PSLQ may hold so
 
 Lastly, it's worth mentioning that there is a way to defend against this attack, and perhaps other lattice reduction attacks. Notice that PSLQ will tend to find small coefficients of the _q_-related coefficients, _base_<sup>_i_</sup> _q_. A randomly chosen private key, _x_, makes these coefficients small (~sqrt(nq)). But a carefully chosen _x_ could make the causal coefficients of _base_<sup>_i_</sup> large. To defend on lattice attacks like this one, it will help if
 - _x_ be the *only* solution of _Ax_ = _u_ mod _q_ small enough for Alice to calculate _bit_ and
-- _x_ be chosen so that some of the <_a_<sub>i</sub>, _x_> are a large multiple of _q_ that a lattice reduction algorithm will reject.
+- _x_ be chosen so that some of the <_a_<sub>i</sub>, _x_> - _u_<sub>i</sub> are a large multiple of _q_ that a lattice reduction algorithm will reject.
 
 The first constraint above may be difficult to pull off, and the two constraints are not a complete answer to lattice attacks. The attacker can still launch a statistical attack on biased plaintext, even without calculating _bit_ correctly every time, by finding a small enough _y_ -- albeit not as small as the private key, _x_ -- such that _Ay_ = _u_ mod _q_. With all that said, the easier constraint -- choosing _x_ so that some of the <_a_<sub>i</sub>, _x_> - _u_<sub>i</sub> are large multiples of _q_ -- is probably a good practice.
