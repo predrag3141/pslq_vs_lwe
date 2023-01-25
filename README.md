@@ -160,7 +160,7 @@ Expected output w of PSLQ: [4, 1, 2, 1, -1, 0, 1, 0, -1, -2, 0, -1, 1]
 PSLQ Found a causal solution [0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1]  with norm 2.23606797749979 : [0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1] != [1, -1, 0, 1, 0, -1, -2, 0, -1] = x
 ```
 
-Here is the meaning of the solution, _v_, above. The first three coefficients (0, -1, 0) of _v_ make the rest of the solution work mod _q_. The next _m_ + 1 = 10 coefficients annihilate (_a_<sub>i,1</sub>, _a_<sub>i,2</sub>, ..., _a_<sub>i,9</sub>, -_u_<sub>i</sub>) mod _q_ for _i_=1,2,3.
+Here is the meaning of the solution, _y_ = `[0, -1, 0, 0, 0, 0, 0, 0, -2, 1, 0, 2, 1]`, above. The first three coefficients (0, -1, 0) of _y_ make the rest of the solution work mod _q_. The next _m_ + 1 = 10 coefficients annihilate (_a_<sub>i,1</sub>, _a_<sub>i,2</sub>, ..., _a_<sub>i,9</sub>, -_u_<sub>i</sub>) mod _q_ for _i_=1,2,3.
 
 # Conclusion
 
