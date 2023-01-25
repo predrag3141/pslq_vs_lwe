@@ -122,7 +122,7 @@ Here,
 - "||" means concatenation
 - The scalar _u_' = _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> _u_<sub>n</sub>
 
-So _v_ is an _n+m+1_-long concatenation of the _n_-long vector of _base<sup>i</sup>_s; an _m_-long combination of the _a<sub>i</sub>_s; and _u'_.
+So _v_ is an _n+m+1_-long concatenation of the _n_-long vector of _base<sup>i</sup>_s; an _m_-long combination of the _a<sub>i</sub>s_; and _u'_.
 
 ### Calling PSLQ
 
