@@ -94,21 +94,22 @@ The fact that _x_ is short and that _Ax_ = _u_ mod _q_ are what make estimate 4 
 ### Constructing Input to PSLQ
 
 Notation:
-- _A_ has row vectors _a_<sub>1</sub>,_a_<sub>2</sub>,...,_a_<sub>n</sub>
+- _A_ has row vectors _a<sub>1</sub>_,_a<sub>2</sub>_,...,_a<sub>n</sub>_
 - _u_ has corresponding entries, _u_<sub>1</sub>,_u_<sub>2</sub>,...,_u_<sub>n</sub>
 - Select a suitably-sized integer, denoted _base_ in what follows
 - _y_ will denote the short solution mentioned in the previous section.
+- _y'_ = (_y'<sub>1</sub>_, _y'<sub>2</sub>_, ..., _y'<sub>n</sub>_) will denote a vector of coefficients that make each constraint in _Ay_ = _u_ work mod _q_. In other words, <_a<sub>i</sub>_, _y_> = _u<sub>i</sub>_ + _y'<sub>i</sub>_ _q_ for _i_=1,...,n.
 - _v_ will denote the input to give PSLQ, to get PSLQ to return a short solution of _Ay_ = _u_ mod _q_
 
 _Ay_ = _u_ mod q
 
-&nbsp;&nbsp;&nbsp;&nbsp;=><_a_<sub>1</sub>, _y_> + <_base_ _a_<sub>2</sub>, _y_> + <_base_<sup>2</sup> _a_<sub>3</sub>, _y_> + ... + <_base_<sup>n-1</sup> _a_<sub>n</sub>, _y_>
+&nbsp;&nbsp;&nbsp;&nbsp;=><_a<sub>1</sub>_, _y_> + <_base_ _a<sub>2</sub>_, _y_> + <_base_<sup>2</sup> _a<sub>3</sub>_, _y_> + ... + <_base_<sup>n-1</sup> _a<sub>n</sub>_, _y_>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> _u_<sub>n</sub>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u<sub>1</sub>_ + _base_ _u<sub>2</sub>_ + _base_<sup>2</sup> _u<sub>3</sub>_ + ... + _base_<sup>n-1</sup> _u<sub>n</sub>_
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- _q_ - _base_ _q_ - _base_<sup>2</sup> _q_ - ... - _base_<sup>n-1</sup> _q_
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- _qy'<sub>1</sub>_, _base_ _qy'<sub>2</sub>_, _base_<sup>2</sup> _qy'<sub>3</sub>_, ..., _base_<sup>n-1</sup> _qy'<sub>n</sub>_
 
-&nbsp;&nbsp;&nbsp;&nbsp;=> _q_ + _base_ _q_ + _base_<sup>2</sup> _q_ + ... + _base_<sup>n-1</sup> _q_
+&nbsp;&nbsp;&nbsp;&nbsp;=> <(_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_), _y'_>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <_a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>, _y_>
 
