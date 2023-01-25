@@ -76,7 +76,7 @@ _b'_ - _b_<sup>t</sup> _x_
 &nbsp;&nbsp;&nbsp;&nbsp;~ _bit_ * _q_/2 (estimate 5)
 
 Since _x_, _e_ and _e'_ were chosen to keep estimate 5 within _q_/4, Alice distinguishes _bit_ = 0 from _bit_ = 1 by concluding that
-- _bit_ = 0 if -_q_/4 < _b'_ - _b_<sup>t</sup> _x_ - _b_<sup>t</sup> _x_ < _q_/4
+- _bit_ = 0 if -_q_/4 < _b'_ - _b_<sup>t</sup> _x_ < _q_/4
 - _bit_ = 1 otherwise
 
 ## Breaking this Scheme with PSLQ
