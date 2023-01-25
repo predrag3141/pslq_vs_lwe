@@ -102,7 +102,7 @@ Notation:
 
 _Ay_ = _u_ mod q
 
-&nbsp;&nbsp;&nbsp;&nbsp;=>_a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>
+&nbsp;&nbsp;&nbsp;&nbsp;=>< _a_<sub>1</sub>, _y_ > + < _base_ _a_<sub>2</sub>, _y_ > + < _base_<sup>2</sup> _a_<sub>3</sub>, _y_ > + ... + < _base_<sup>n-1</sup> _a_<sub>n</sub>, _y_ >
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> _u_<sub>n</sub>
 
@@ -110,7 +110,7 @@ _Ay_ = _u_ mod q
 
 &nbsp;&nbsp;&nbsp;&nbsp;=> _q_ + _base_ _q_ + _base_<sup>2</sup> _q_ + ... + _base_<sup>n-1</sup> _q_
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ _a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ < _a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub>, _y_ >
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (-_u_<sub>1</sub>) + _base_ (-_u_<sub>2</sub>) + _base_<sup>2</sup> (-_u_<sub>3</sub>) + ... + _base_<sup>n-1</sup> (-_u_<sub>n</sub>) = 0 (equation 6)
 
