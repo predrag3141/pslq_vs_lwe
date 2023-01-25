@@ -116,9 +116,13 @@ _Ay_ = _u_ mod q
 
 Based on equation 6, PSLQ is given input
 
-_v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_,  _a_<sub>1</sub>, _base_ _a_<sub>2</sub>, _base_<sup>2</sup> _a_<sub>3</sub>, ..., _base_<sup>n-1</sup> _a_<sub>n</sub>, -_u_')
+_v_ = (_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_) || _a_<sub>1</sub> + _base_ _a_<sub>2</sub> + _base_<sup>2</sup> _a_<sub>3</sub> + ... + _base_<sup>n-1</sup> _a_<sub>n</sub> || ( -_u_')
 
-where _u_' = _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> _u_<sub>n</sub>
+Here,
+- "||" means concatenation
+- The scalar _u_' = _u_<sub>1</sub> + _base_ _u_<sub>2</sub> + _base_<sup>2</sup> _u_<sub>3</sub> + ... + _base_<sup>n-1</sup> _u_<sub>n</sub>
+
+So _v_ is an _n+m+1_-long concatenation of the _n_-long vector of _base<sup>i</sup>_s; an _m_-long combination of the _a_<sub>i<sub>s; and _u'_.
 
 ### Calling PSLQ
 
