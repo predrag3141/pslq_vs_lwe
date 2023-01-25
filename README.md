@@ -107,7 +107,7 @@ _Ay_ = _u_ mod q
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= _u<sub>1</sub>_ + _base_ _u<sub>2</sub>_ + _base_<sup>2</sup> _u<sub>3</sub>_ + ... + _base_<sup>n-1</sup> _u<sub>n</sub>_
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- _qy'<sub>1</sub>_, _base_ _qy'<sub>2</sub>_, _base_<sup>2</sup> _qy'<sub>3</sub>_, ..., _base_<sup>n-1</sup> _qy'<sub>n</sub>_
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- _qy'<sub>1</sub>_ + _base_ _qy'<sub>2</sub>_ + _base_<sup>2</sup> _qy'<sub>3</sub>_ + ... + _base_<sup>n-1</sup> _qy'<sub>n</sub>_
 
 &nbsp;&nbsp;&nbsp;&nbsp;=> <(_q_, _base_ _q_, _base_<sup>2</sup> _q_, ..., _base_<sup>n-1</sup> _q_), _y'_>
 
